@@ -29,8 +29,22 @@ resource "google_compute_instance" "test_instans" {
 
   provisioner "remote-exec" {
     inline = [
-          "echo 'sss' > test.txt ",
-          "echo ${self.network_interface.0.access_config.0.nat_ip} >> ~/pub_ip_address.txt"
+          "echo ${self.network_interface.0.access_config.0.nat_ip} >> ~/pub_ip_address.txt",
+          "sudo apt install apache2",
+          "sudo systemctl status apache2",
+          "sudo systemctl is-enabled apache2",
+          "sudo apt install mariadb-server mariadb-client",
+          "sudo systemctl status mariadb",
+          "sudo systemctl is-enabled mariadb",
+          "sudo mysql_secure_installation",
+          "mysql -u root -p",
+          "sudo mysql -u root",
+          "sudo apt install php libapache2-mod-php php-mysql",
+          "sudo apt-cache search php | grep php-",
+          "sudo apt install php-redis php-zip",
+          "sudo systemctl restart apache2",
+          "sudo echo <?php phpinfo();?> >> /var/www/html/info.php"
+
       ]
 
     connection {
@@ -52,7 +66,7 @@ resource "google_compute_firewall" "default" {
 }
 
 resource "google_compute_network" "vpc_network" {
-  name                    = "terraform-vpc-145"
+  name                    = "my-network-145"
   auto_create_subnetworks = "true"
 }
 
